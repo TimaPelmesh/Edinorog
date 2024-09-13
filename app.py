@@ -1,13 +1,18 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/api/message', methods=['POST'])
-def message():
-    user_message = request.json.get('message')
-    # Ваш ИИ может быть более сложным. Здесь простой в качестве примера:
-    response_message = f"Это ответ на ваше сообщение '{user_message}'."
-    return jsonify({'response': response_message})
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/data', methods=['POST'])
+def data():
+    received_data = request.json
+    # Здесь вы можете обработать полученные данные,
+    # например, выполнить некоторые вычисления или сохранить их
+    response_data = {'message': 'Данные получены', 'received': received_data}
+    return jsonify(response_data)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True)
