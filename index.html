@@ -1,26 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Название команды</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Розовые единороги</h1>
-        </header>
-
-        <main>
-            <div class="chat-box">
-                <div id="chat-window"></div>
-                <input type="text" id="user-input" placeholder="Введите сообщение...">
-                <button id="send-btn">Отправить</button>
-            </div>
-        </main>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Text Generator</title>
+        <script>
+            async function generateText() {
+                const userInput = document.getElementById('userInput').value;
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ input: userInput })
+                });
+                const data = await response.json();
+                document.getElementById('output').innerText = data.generated_text;
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Text Generator</h1>
+        <input type="text" id="userInput" />
+        <button onclick="generateText()">Generate</button>
+        <p id="output"></p>
+    </body>
+    </html>
+    
