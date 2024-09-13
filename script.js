@@ -1,42 +1,23 @@
-document.getElementById('send-btn').addEventListener('click', sendMessage);
-document.getElementById('user-input').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') sendMessage();
-});
+document.addEventListener('DOMContentLoaded', function () {
+    const sendDataButton = document.getElementById('send-data');
 
-async function sendMessage() {
-    const userInput = document.getElementById('user-input');
-    const message = userInput.value.trim();
-    if (message) {
-        const chatWindow = document.getElementById('chat-window');
+    sendDataButton.addEventListener('click', function () {
+        const dataToSend = { key: 'value' }; // Здесь можно изменить данные для отправки
 
-        // Добавление сообщения пользователя в окно чата
-        const userMessageDiv = document.createElement('div');
-        userMessageDiv.textContent = `Вы: ${message}`;
-        userMessageDiv.style.textAlign = 'right';
-        chatWindow.appendChild(userMessageDiv);
-
-        // Отправка сообщения на сервер
-        const response = await fetch('/api/message', {
+        fetch('/data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ message: message })
+            body: JSON.stringify(dataToSend)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Успех:', data);
+            // Здесь вы можете обновить DOM или выполнить другие действия после успешной отправки
+        })
+        .catch((error) => {
+            console.error('Ошибка:', error);
         });
-
-        const data = await response.json();
-        const botResponse = data.response;
-
-        // Добавление ответа ИИ в окно чата
-        const botResponseDiv = document.createElement('div');
-        botResponseDiv.textContent = `ИИ: ${botResponse}`;
-        botResponseDiv.style.textAlign = 'left';
-        chatWindow.appendChild(botResponseDiv);
-
-        // Очистка поля ввода
-        userInput.value = '';
-
-        // Прокрутка чата вниз
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-}
+    });
+});
